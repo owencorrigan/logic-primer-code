@@ -18,8 +18,6 @@ class STATEMENT:
         return hyp_strings + "⊢ " + str(self)
         
 
-known = {}
-
 class IMPLIES(STATEMENT):
     def __init__(self, p, q, reason, prev_step, hypotheses):
         self.p = p
@@ -28,7 +26,7 @@ class IMPLIES(STATEMENT):
         self.reason = reason
         self.hypotheses = hypotheses
         
-    def sub(self, t, known = known):
+    def sub(self, t):
         hyp_sub = [i.sub(t) for i in self.hypotheses if 
                    i.sub(t).full_str() not in known]
         s2 = (self.p.sub(t)).IMPLIES(self.q.sub(t), reason = "SUB: " + str(t), 
@@ -37,7 +35,7 @@ class IMPLIES(STATEMENT):
             known[s2.full_str()] = s2
         return s2
     
-    def modus_ponens(self, known = known):
+    def modus_ponens(self):
         str_hyps = [str(i) for i in self.hypotheses]
         if(self.p.full_str() in known or str(self.p) in str_hyps):
             if(self.q.full_str() not in known):
@@ -70,7 +68,7 @@ class NOT(STATEMENT):
         self.reason = reason
         self.hypotheses = hypotheses
         
-    def sub(self, t, known = known):
+    def sub(self, t):
         hyp_sub = [i.sub(t) for i in self.hypotheses if 
                    i.sub(t).full_str() not in known]
         s2 = NOT(self.p.sub(t), reason = "SUB: " + str(t), prev_step = self, 
@@ -113,7 +111,4 @@ axiom2 = (P.IMPLIES(Q.IMPLIES(R))).IMPLIES(
 axiom3 = (NOT(P).IMPLIES(NOT(Q))).IMPLIES(
           (NOT(P).IMPLIES(Q)).IMPLIES(P), reason = "axiom 3")
   
-for i in [axiom1, axiom2, axiom3]:
-    known[i.full_str()] = i
-
-
+known = {i.full_str(): i for i in [axiom1, axiom2, axiom3]}
