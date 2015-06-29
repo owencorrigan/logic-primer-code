@@ -1,5 +1,5 @@
-# Logic
+# Logic Primer Code
 
-A place to keep the python solutions to a book on logic I am reading
+Python solutions to a book on logic
 
 [A Primer for Logic and Proof](http://mathsci2.appstate.edu/~jlh/primer/hirst.pdf)
